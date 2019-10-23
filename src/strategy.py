@@ -46,7 +46,7 @@ class StartRubberDuck(StartDuck):
     display_name = 'rubber'
 
 
-# 问题1,现在需要添加一种飞行行为，
+# 问题1,现在需要添加多种飞行行为，鸭叫行为
 # 解决1,在StartDuck中添加fly方法
 # 会发现，所有鸭子都会飞了，橡胶鸭也能飞了!
 # 解决2,将fly变成接口
@@ -91,17 +91,26 @@ class MidRubberDuck(MidDuck):
 
 
 # 解决3，封装变化，将鸭子的飞行和叫的行为分开，并且针对接口编程
+# 问题2，如何动态的添加行为
+# 解决4，为Duck添加setter方法，其实python可以对属性进行再赋值
 class EndDuck(object):
     display_name = 'normal'
 
-    quack_behavior = None
-    fly_behavior = None
+    def __init__(self):
+        self.quack_behavior = None
+        self.fly_behavior = None
 
     def display(self):
         print('I am a %s duck.' % self.display_name)
 
     def perform_fly(self):
         self.fly_behavior.fly()
+
+    def set_quack_behavior(self, quack_behavior):
+        self.quack_behavior = quack_behavior
+
+    def set_fly_behavior(self, fly_behavior):
+        self.fly_behavior = fly_behavior
 
 
 class QuackMixin(abc.ABC):
@@ -129,6 +138,11 @@ class QuackGuaGua(QuackMixin):
 class FlyWithWings(FlyMixin):
     def fly(self):
         print('flying with wings.')
+
+
+class FlyWithRocket(FlyMixin):
+    def fly(self):
+        print('flying with Rocket.')
 
 
 class FlyNoWay(FlyMixin):
@@ -169,3 +183,7 @@ if __name__ == '__main__':
     green_duck.perform_fly()
     red_duck.perform_fly()
     rubber_duck.perform_fly()
+
+    fly_rocket = FlyWithRocket()
+    green_duck.set_fly_behavior(fly_rocket)
+    green_duck.perform_fly()
