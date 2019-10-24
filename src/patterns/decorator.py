@@ -14,6 +14,8 @@
     beverage 饮料 grass jelly 仙草冻 2.00 coffee jelly 咖啡冻 3.00 coconut jelly 椰果 3.50 pudding 布丁 3.00
 """
 
+from src.utils import start_end
+
 
 class StartBeverage(object):
     description = 'unknown'
@@ -74,7 +76,7 @@ class StartFruitTeaWithCoffee(StartBeverage):
 
 
 class StartFruitTeaWithCoconut(StartBeverage):
-    """果茶加咖啡冻"""
+    """果茶加椰果"""
     description = 'fruit tea, coconut'
 
     def cost(self):
@@ -90,7 +92,74 @@ class StartFruitTeaWithPudding(StartBeverage):
 
 
 # 类真多
-# 怎么减少呢
+# 怎么减少呢?
+# 解决1，将Beverage类添加调料设置和取得的方法
+class MidBeverage(object):
+    description = 'unknown'
+    base_cost = 0
+
+    def __init__(self):
+        self.grass = None
+        self.coffee = None
+        self.coconut = None
+        self.pudding = None
+
+    def has_grass(self):
+        return True if self.grass else False
+
+    def set_grass(self):
+        self.grass = True
+
+    def has_coffee(self):
+        return True if self.coffee else False
+
+    def set_coffee(self):
+        self.coffee = True
+
+    def has_coconut(self):
+        return True if self.coconut else False
+
+    def set_coconut(self):
+        self.coconut = True
+
+    def has_pudding(self):
+        return True if self.pudding else False
+
+    def set_pudding(self):
+        self.pudding = True
+
+    def cost(self):
+        total_cost = self.base_cost
+        if self.has_grass():
+            total_cost += 2.00
+        if self.has_coffee():
+            total_cost += 3.00
+        if self.has_coconut():
+            total_cost += 3.50
+        if self.has_pudding():
+            total_cost += 3.00
+        return total_cost
+
+    def get_description(self):
+        description = self.description
+        if self.has_grass():
+            description = description + ', grass'
+        if self.has_coffee():
+            description = description + ', coffee'
+        if self.has_coconut():
+            description = description + ', coconut'
+        if self.has_pudding():
+            description = description + ', pudding'
+        return description
+
+
+class MidBubbleTea(MidBeverage):
+    description = 'bubble tea'
+    base_cost = 15.00
+
+
+# 怎么这么多条件判断，而且我要双份椰果怎么办?
+# 解决2，使用装饰者模式
 
 class BubbleTea(StartBeverage):
     description = 'bubble tea'
@@ -164,7 +233,16 @@ class Pudding(CondimentDecorator):
         return self.beverage.cost() + 3.00
 
 
-def main():
+@start_end
+def mid_main():
+    beverage = MidBubbleTea()
+    beverage.set_grass()
+    beverage.set_coconut()
+    print('%s ￥%s' % (beverage.get_description(), beverage.cost()))
+
+
+@start_end
+def end_main():
     # 双份椰果加仙草的珍珠奶茶
     beverage = BubbleTea()
     print('%s ￥%s' % (beverage.get_description(), beverage.cost()))
@@ -175,4 +253,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    mid_main()
+    end_main()
