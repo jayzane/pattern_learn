@@ -155,6 +155,7 @@ class EndGreenHeadDuck(EndDuck):
 
     def __init__(self):
         # TODO(jayzane): 不使用具体实现
+        super().__init__()
         self.quack_behavior = QuackGaGa()
         self.fly_behavior = FlyWithWings()
 
@@ -163,6 +164,7 @@ class EndRedHeadDuck(EndDuck):
     display_name = 'red-head'
 
     def __init__(self):
+        super().__init__()
         self.quack_behavior = QuackGaGa()
         self.fly_behavior = FlyWithWings()
 
@@ -171,6 +173,7 @@ class EndRubberDuck(EndDuck):
     display_name = 'rubber'
 
     def __init__(self):
+        super().__init__()
         self.quack_behavior = QuackGuaGua()
         self.fly_behavior = FlyNoWay()
 
